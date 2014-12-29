@@ -3,7 +3,7 @@
   <channel>
       <title>Test on Bobby Cooper </title>
       <generator uri="https://hugo.spf13.com">Hugo</generator>
-    <link>http://localhost:1313/blog/tags/test/index.xml/</link>
+    <link>http://bcoop713.github.io/blog/tags/test/index.xml/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>Second</title>
-      <link>http://localhost:1313/blog/post/second/</link>
+      <link>http://bcoop713.github.io/blog/post/second/</link>
       <pubDate>Mon, 29 Dec 2014 13:38:33 EST</pubDate>
       
-      <guid>http://localhost:1313/blog/post/second/</guid>
+      <guid>http://bcoop713.github.io/blog/post/second/</guid>
       <description>
 
 &lt;h1 id=&#34;toc_0&#34;&gt;An exhibit of Markdown&lt;/h1&gt;
@@ -108,10 +108,10 @@
     
     <item>
       <title>first</title>
-      <link>http://localhost:1313/blog/post/first/</link>
+      <link>http://bcoop713.github.io/blog/post/first/</link>
       <pubDate>Mon, 22 Dec 2014 13:38:33 EST</pubDate>
       
-      <guid>http://localhost:1313/blog/post/first/</guid>
+      <guid>http://bcoop713.github.io/blog/post/first/</guid>
       <description>
 
 &lt;h1 id=&#34;toc_0&#34;&gt;An exhibit of Markdown&lt;/h1&gt;
