@@ -2,7 +2,7 @@
 date = "2014-12-29T13:38:33-05:00"
 draft = true
 title = "Second"
-tags = [ "go", "test", "pizza", "Sammi", "Python" ]
+tags = [ "go", "test", "pizza", "Blue", "Python" ]
 
 +++
 
