@@ -1,0 +1,70 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/styles.css">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<title>Bbq &middot; Bobby Cooper</title>
+</head>
+
+<body>
+	<div class="container">
+		<nav>
+	<div class="nav__top">
+		<h1>A blog about modern web technologies</h1>
+		<a href="/" class="nav__page hide-underscore">
+			<i class="fa fa-home fa-lg"></i>
+		</a>
+		<a href="/about" class="nav__page hide-underscore">
+			<i class="fa fa-user fa-lg"></i>
+		</a>
+	</div>
+	<div class="nav__middle">
+
+		<div class="nav__tags">
+			
+			<a href="/tags/bbq" class="nav__tag">bbq</a>
+			
+			<a href="/tags/dog" class="nav__tag">dog</a>
+			
+			<a href="/tags/go" class="nav__tag">go</a>
+			
+			<a href="/tags/pizza" class="nav__tag">pizza</a>
+			
+			<a href="/tags/test" class="nav__tag">test</a>
+			
+			<a href="/tags/utapishtim" class="nav__tag">utapishtim</a>
+			
+		</div>
+	</div>
+	<div class="nav__bottom">
+		<p>I am a fullstack developer living in Ann Arbor, Michigan.</p>	
+	</div>
+</nav>
+
+		<main>
+			<div class="posts">
+
+				
+				<div class="post">
+					<h1 class="post-title">
+						<a href="http://localhost:1313/about/">
+							about
+						</a>
+					</h1>
+
+					<div class="post-date">Mon, Dec 22, 2014</div>
+
+					A headline {{ .Title }} {{ range .Data.Pages }} {{ .Render &ldquo;summary&rdquo;}} {{ end }}
+				</div>
+				
+			</div>
+		</main>
+	</div>
+<script>document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+		+ ':1313/livereload.js?mindelay=10"></'
+        + 'script>')</script></body>
+</html>

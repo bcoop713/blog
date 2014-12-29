@@ -1,0 +1,6 @@
+baseurl = "http://yourSiteHere"
+languageCode = "en-us"
+title = "Bobby Cooper"
+[params]
+	Subtitle = "A blog about modern web technologies"
+	Greeting = "Happy coding from Ann Arbor, MI"
