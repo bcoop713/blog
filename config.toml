@@ -1,4 +1,4 @@
-baseurl = "http://bcoop713.github.io/blog/"
+baseurl = "http://bcoop713.github.io/blog"
 languageCode = "en-us"
 title = "Bobby Cooper"
 [params]
