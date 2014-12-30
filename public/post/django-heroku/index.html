@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="http://bcoop713.github.io/blog/css/styles.css">
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<title>Deploying Django to Heroku &middot; Bobby Cooper</title>
+</head>
+
+<body>
+	<div class="container">
+		<nav>
+	<div class="nav__top">
+		<h1>A blog about modern web technologies</h1>
+		<a href="http://bcoop713.github.io/blog" class="nav__page hide-underscore">
+			<i class="fa fa-home fa-lg"></i>
+		</a>
+	</div>
+	<div class="nav__middle">
+
+		<div class="nav__tags">
+			
+			
+			<a href="http://bcoop713.github.io/blog/tags/django" class="nav__tag">django</a>
+			
+			<a href="http://bcoop713.github.io/blog/tags/tutorial" class="nav__tag">tutorial</a>
+			
+
+		</div>
+	</div>
+	<div class="nav__bottom">
+		<div class="nav__links">
+			<a href="http://github.com/bcoop713" class="hide-underscore">
+				<i class="fa fa-lg fa-github"></i>
+			</a>
+			<a href="http://twitter.com/bcoop713" class="hide-underscore">
+				<i class="fa fa-lg fa-twitter"></i>
+			</a>
+		</div>
+		<p class="nav__greeting">Happy coding from Ann Arbor, MI</p>	
+	</div>
+</nav>
+
+		<main>
+			<div class="content">
+				<div class="posts">
+
+					<div class="post">
+						<h1 class="post__title">
+							<a href="http://bcoop713.github.io/blog/post/django-heroku/">
+								Deploying Django To Heroku
+							</a>
+						</h1>
+
+						<div class="post__details">
+	<div class="post__date">Mon, Dec 22, 2014</div>
+	<ul class="post__tags">
+	
+	
+		<li class="post__tag"><a href="http://bcoop713.github.io/blog/tags/django">django</a> </li>
+	
+		<li class="post__tag"><a href="http://bcoop713.github.io/blog/tags/tutorial">tutorial</a> </li>
+	
+	</ul>
+</div>
+
+						
+
+<p>For years, I&rsquo;ve used Amazon EC2 and Digital Ocean for hosting my various web apps, but when I started playing around with blogs and other apps, I didn&rsquo;t want to spend a whole lot of time on Dev Ops. Since Heroku seems to be the big name in PaaS, I decided to check them out first. They have a very well written tutorial, however, it&rsquo;s not perfect, and it left me hanging a few times.</p>
+
+<h2 id="toc_0">The Set Up:</h2>
+
+<p>When I started the Heroku tutorial, I already had my django blog working on my development machine inside a virtual environment, therefore I picked up the tutorial at the install step.  A simple pip install supposedly loads all the required packages on your machine, including gunicorn, dj-static (a server for serving static files), dj-database (database configuration helper) and Django if it&rsquo;s not already installed.  But as you will see later, I had to install some additional ruby gems to get things going.  I&rsquo;m still not sure why.</p>
+
+<pre><code>$ pip install django-toolbelt
+</code></pre>
+
+<h2 id="toc_1">Configure the settings and server files:</h2>
+
+<p>The next step was new to me.  I had to create a file with the name &ldquo;Procfile&rdquo; in my project root directory.  This file contains the instructions for Heroku to start your web app with a &ldquo;web dyno&rdquo;.  A dyno is Heroku&rsquo;s word for a container that can run any command.  In this case, it will start the webserver.  The free tier includes 1 dyno at a time.   So, I created the file and added the following to it.</p>
+
+<pre><code>web: gunicorn me.wsgi
+</code></pre>
+
+<p>where &ldquo;me&rdquo; is the inspired name for my blog project.</p>
+
+<p>According to the tutorial, you should now be able to run</p>
+
+<pre><code>$ foreman start
+</code></pre>
+
+<p>and it should run your procfile, and thus start Gunicorn and run your app. However, this resulted in an error message for me &ldquo;command not found&rdquo;&hellip;My computer had no clue who or what this &ldquo;foreman&rdquo; was.  After doing some digging, I found out that it and the Heroku command, which will be needed soon, are both installed with ruby gems.  So after running a couple commands, I got back up to speed.  If anyone could  tell me why this is and why it&rsquo;s not in the tutorial, I would be very grateful.</p>
+
+<pre><code>$ sudo gem install heroku
+$ sudo gem install foreman
+</code></pre>
+
+<p>If you&rsquo;re familiar with virtualenv then you have already been doing the next step.</p>
+
+<pre><code>$ pip freeze &gt; requirements.txt
+</code></pre>
+
+<p>This creates a file in your project directory that lists all the dependencies for your django app.  When you push to Heroku later, it reads this file, and installs all the dependencies and installs them.</p>
+
+<p>The next step is to paste the following code into the bottom of your settings.py file</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #75715e"># Parse database configuration from $DATABASE_URL</span>
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">dj_database_url</span>
+<span style="color: #f8f8f2">DATABASES[</span><span style="color: #e6db74">&#39;default&#39;</span><span style="color: #f8f8f2">]</span> <span style="color: #f92672">=</span>  <span style="color: #f8f8f2">dj_database_url</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">config()</span>
+
+<span style="color: #75715e"># Honor the &#39;X-Forwarded-Proto&#39; header for request.is_secure()</span>
+<span style="color: #f8f8f2">SECURE_PROXY_SSL_HEADER</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;HTTP_X_FORWARDED_PROTO&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&#39;https&#39;</span><span style="color: #f8f8f2">)</span>
+
+<span style="color: #75715e"># Allow all host headers</span>
+<span style="color: #f8f8f2">ALLOWED_HOSTS</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">[</span><span style="color: #e6db74">&#39;*&#39;</span><span style="color: #f8f8f2">]</span>
+
+<span style="color: #75715e"># Static asset configuration</span>
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">os</span>
+<span style="color: #f8f8f2">BASE_DIR</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">os</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">path</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">dirname(os</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">path</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">abspath(__file__))</span>
+<span style="color: #f8f8f2">STATIC_ROOT</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&#39;staticfiles&#39;</span>
+<span style="color: #f8f8f2">STATIC_URL</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&#39;/static/&#39;</span>
+
+<span style="color: #f8f8f2">STATICFILES_DIRS</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">(</span>
+    <span style="color: #f8f8f2">os</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">path</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">join(BASE_DIR,</span> <span style="color: #e6db74">&#39;static&#39;</span><span style="color: #f8f8f2">),</span>
+<span style="color: #f8f8f2">)</span>
+</pre></div>
+
+<p>The problem with this is that simply pasting this into your settings.py file will allow your app to work on heroku, but it will break it in development.  The solution to this is to maintain two settings files, a settings.py for heroku, and a local_settings.py for development.</p>
+
+<p>Next on the tutorial was a little unclear.  The instructions were to &ldquo;add the following code to wsgi.py&rdquo;</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">from</span> <span style="color: #f8f8f2">django.core.wsgi</span> <span style="color: #f92672">import</span> <span style="color: #f8f8f2">get_wsgi_application</span>
+<span style="color: #f92672">from</span> <span style="color: #f8f8f2">dj_static</span> <span style="color: #f92672">import</span> <span style="color: #f8f8f2">Cling</span>
+
+<span style="color: #f8f8f2">application</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">Cling(get_wsgi_application())</span>
+</pre></div>
+
+<p>The problem is, that after a default django install, by wsgi.py file already looked like:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">import</span> <span style="color: #f8f8f2">os</span>
+<span style="color: #f8f8f2">os</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">environ</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">setdefault(</span><span style="color: #e6db74">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;me.settings&quot;</span><span style="color: #f8f8f2">)</span>
+
+<span style="color: #f92672">from</span> <span style="color: #f8f8f2">django.core.wsgi</span> <span style="color: #f92672">import</span> <span style="color: #f8f8f2">get_wsgi_application</span>
+<span style="color: #f8f8f2">application</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">get_wsgi_application()</span>
+</pre></div>
+
+<p>So I figured that I should just add in the Cling function, and that turned out to be correct:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">import</span> <span style="color: #f8f8f2">os</span>
+<span style="color: #f92672">from</span> <span style="color: #f8f8f2">dj_static</span> <span style="color: #f92672">import</span> <span style="color: #f8f8f2">Cling</span>
+<span style="color: #f8f8f2">os</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">environ</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">setdefault(</span><span style="color: #e6db74">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;me.settings&quot;</span><span style="color: #f8f8f2">)</span>
+
+<span style="color: #f92672">from</span> <span style="color: #f8f8f2">django.core.wsgi</span> <span style="color: #f92672">import</span> <span style="color: #f8f8f2">get_wsgi_application</span>
+<span style="color: #f8f8f2">application</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">Cling(get_wsgi_application())</span>
+</pre></div>
+
+<h2 id="toc_2">Git Goin</h2>
+
+<p>This part is pretty straight forward if you&rsquo;re familiar with git.  Heroku uses git to push your project to their servers.  It is highly advised that you create a .gitignore file in your project root directory, and add some lines to prevent any of the .pyc or your local_settings.py file from being sent to Heroku.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #75715e">#.gitignore</span>
+
+venv
+*.pyc
+staticfiles
+local_settings.py
+</pre></div>
+
+<p>The following commands should be all you need to start a git repo, add the project files to it, and commit them:</p>
+
+<pre><code>$ git init
+$ git add .
+$ git commit -m &quot;first commit&quot;
+</code></pre>
+
+<h2 id="toc_3">Deploy to Heroku</h2>
+
+<p>The moment you have been waiting for is here.  Create a new Heroku project with</p>
+
+<pre><code>$ heroku create
+</code></pre>
+
+<p>Push your code to your newly created heroku project</p>
+
+<pre><code>$ git push heroku master
+</code></pre>
+
+<p>Start one dyno</p>
+
+<pre><code>$ heroku ps:scale web=1
+</code></pre>
+
+<p>This starts the dyno and runs the command in that procfile we made earlier.  Your app should now be live and running on the interweb. You can then check your websites status with the following command.</p>
+
+<pre><code>$ heroku ps
+</code></pre>
+
+<p>Of course, when I ran this command, I got a message saying that my website had crashed shortly after take off. So I checked the error logs with the command</p>
+
+<pre><code>$ heroku logs
+</code></pre>
+
+<p>And it looked like heroku had no clue where my settings.py file was.  After some more digging I found out that I could explicity tell heroku where it was with the command</p>
+
+<pre><code>$ heroku config:add DJANGO_SETTINGS_MODULE=me.settings
+</code></pre>
+
+<p>Not sure why Heroku didn&rsquo;t know where the settings were on a default django install, but this fixed all my issues, and I was then able to visit my site with the simple command</p>
+
+<pre><code>$ heroku open
+</code></pre>
+
+<h2 id="toc_4">Impressions</h2>
+
+<p>Even though I had a few issues, I managed to get through eveything relatively easily.  I would like to try out some other PaaS providers, but as of right now, I don&rsquo;t know if Heroku can be beat when it comes to a quality free tier and ease of use.</p>
+
+						<div id="disqus_thread"></div>
+						<script type="text/javascript">
+							 
+        var disqus_shortname = 'bobby-cooper'; 
+        var disqus_identifier = "Deploying Django to Heroku" + "2014-12-22T13:38:33-05:00";
+
+         
+        (function() {
+        	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        	dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script type="text/javascript">
+	var mq = window.matchMedia('all and (max-width: 500px)');
+	var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+	if(mq.matches) {
+		window.scrollTo(0, h);
+		console.log(h);
+	} else {
+	    
+	}
+</script>
+</body>
+</html>
