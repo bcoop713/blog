@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://bcoop713.github.io/blog/</loc>
+    <loc>http://bobby-cooper.com/</loc>
     <lastmod>2014-12-22T13:38:33-05:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://bcoop713.github.io/blog/post/django-heroku/</loc>
+    <loc>http://bobby-cooper.com/post/django-heroku/</loc>
     <lastmod>2014-12-22T13:38:33-05:00</lastmod>
   </url>
   

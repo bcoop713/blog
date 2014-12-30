@@ -3,7 +3,7 @@
   <channel>
       <title>Posts on Bobby Cooper </title>
       <generator uri="https://hugo.spf13.com">Hugo</generator>
-    <link>http://bcoop713.github.io/blog/post/index.xml/</link>
+    <link>http://bobby-cooper.com/post/index.xml/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>Deploying Django to Heroku</title>
-      <link>http://bcoop713.github.io/blog/post/django-heroku/</link>
+      <link>http://bobby-cooper.com/post/django-heroku/</link>
       <pubDate>Mon, 22 Dec 2014 13:38:33 EST</pubDate>
       
-      <guid>http://bcoop713.github.io/blog/post/django-heroku/</guid>
+      <guid>http://bobby-cooper.com/post/django-heroku/</guid>
       <description>
 
 &lt;p&gt;For years, I&amp;rsquo;ve used Amazon EC2 and Digital Ocean for hosting my various web apps, but when I started playing around with blogs and other apps, I didn&amp;rsquo;t want to spend a whole lot of time on Dev Ops. Since Heroku seems to be the big name in PaaS, I decided to check them out first. They have a very well written tutorial, however, it&amp;rsquo;s not perfect, and it left me hanging a few times.&lt;/p&gt;
