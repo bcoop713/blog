@@ -594,14 +594,21 @@ main {
       color: #262626;
       border-color: #FFEB3B; }
 
-.highlight {
+.highlight pre {
   background: #191919 !important;
   border-radius: 4px;
   box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.7);
-  padding: 1rem 2rem; }
-  .highlight pre {
-    font-family: 'Source Code Pro', monospace !important;
-    font-size: 1rem !important; }
+  padding: 8px;
+  font-family: 'Source Code Pro', monospace !important;
+  font-size: 1rem !important; }
+
+pre {
+  background: #191919 !important;
+  border-radius: 4px;
+  box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.7);
+  font-family: 'Source Code Pro', monospace !important;
+  padding: 4px;
+  font-size: 1rem !important; }
 
 .fa {
   color: rgba(255, 255, 255, 0.7);
